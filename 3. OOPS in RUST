@@ -1,10 +1,13 @@
-0. TOPIC: 
-0.1 INTRO: 
+0. How Rust Outperforms Java in OOP & System Design — A Parking Lot Case Study
+
+0.1 We all know Java as the go-to language for object-oriented design. But what if there’s a better way — one that’s safer, faster, and more composable by default?
+In this post, I’ll show how Rust not only supports OOP, but does it with better safety, zero-cost abstractions, and SOLID principles baked in.
+Using a Parking Lot System example, let’s break down how Rust compares to Java — from encapsulation to macros — and why it might be time to rethink how we build backend systems.
 ------------------------------------------------------------------------------------------------------------------------------------
 
 1. What is SOLID? And How Our Parking Lot Follows It
 
-**SOLID** is a set of design principles that make code robust and easy to maintain:
+1.1 **SOLID** is a set of design principles that make code robust and easy to maintain:
 
 * **S**ingle Responsibility — each unit should do one job.
 * **O**pen/Closed — extend without changing existing code.
@@ -12,15 +15,17 @@
 * **I**nterface Segregation — no bloated interfaces.
 * **D**ependency Inversion — depend on abstractions, not implementations.
 
-### In our Parking Lot:
+1.2 In our Parking Lot:
 
-| Component         | Responsibility                                |
-| ----------------- | --------------------------------------------- |
-| `ParkingSpot`     | Manages spot status                           |
-| `FeeStrategy`     | Calculates fee (hourly, membership)           |
-| `VehicleFactory`  | Creates car/bike objects                      |
-| `PaymentStrategy` | Handles how payment is done (cash, card)      |
-| `ExitObserver`    | Observes exit, triggers payment, vacates spot |
+| Component         | Responsibility                                | How SOLID Applies                                                                | Design Details                                                                                      |
+| ----------------- | --------------------------------------------- | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `ParkingLot`      | Central manager for spots, vehicles, payments | **SRP**: Controls coordination only  <br> **DIP**: Depends on abstractions       | `Singleton` class that uses all abstractions like `FeeStrategy`, `Vehicle`, `PaymentStrategy`, etc. |
+| `ParkingSpot`     | Manages spot status                           | **SRP**: Manages occupancy <br> **LSP**: Subtypes like `CarSpot` behave same     | `Abstract Class ParkingSpot` → `CarSpot`, `BikeSpot`                                                |
+| `FeeStrategy`     | Calculates fee (hourly, membership)           | **OCP**: Add new fee types without change <br> **ISP**: Focused interface        | `Interface FeeStrategy` → `Hourly`, `Membership`                                                    |
+| `VehicleFactory`  | Creates car/bike objects                      | **SRP**: Creation only <br> **DIP**: Returns abstract `Vehicle`                  | `Factory Class` → creates `Vehicle` objects like `Car`, `Bike`                                      |
+| `Vehicle`         | Abstract base for car/bike                    | **LSP**: `Car` and `Bike` behave as `Vehicle`                                    | `Abstract Class Vehicle` → `Car`, `Bike`                                                            |
+| `PaymentStrategy` | Handles how payment is done (cash, card)      | **OCP**: Add strategies without changes <br> **ISP + DIP**: Payment logic clean  | `Strategy Interface` → `Cash`, `CreditCard`                                                         |
+| `ExitObserver`    | Observes exit, triggers payment, vacates spot | **SRP**: Listens only <br> **OCP**: Extendable for future actions (e.g., notify) | `Observer Pattern` → on vehicle exit: trigger payment and vacate `ParkingSpot`                      |
 
 ✅ In **Java**, you rely on discipline and conventions.
 ✅ In **Rust**, the language enforces safety and separation at compile time.
@@ -28,7 +33,7 @@
 ------------------------------------------------------------------------------------------------------------------------------------
 2. 🔐 Encapsulation, 🧬 Inheritance, 🎭 Polymorphism
 
-### Encapsulation
+2.1 Encapsulation
 
 **Java:**
 
@@ -57,7 +62,7 @@ impl ParkingSpot {
 
 ✅ Fields are private by default in Rust. No reflection. Borrowing prevents unsafe access.
 
-### Inheritance & Polymorphism
+2.2 Inheritance & Polymorphism
 
 **Java:**
 
@@ -88,8 +93,8 @@ impl ParkingSpot for CarSpot {
 | ----------- | ----------------------- | ------------------- |
 | Interface   | `interface FeeStrategy` | `trait FeeStrategy` |
 | Class       | `class Car`             | `struct Car + impl` |
-| Inheritance | `extends`               | ❌ Not supported     |
-| Composition | ✅                       | ✅                   |
+| Inheritance | `extends`               | ❌ Not supported    |
+| Composition | ✅                      | ✅                 |
 
 ### Fee Strategy Example
 
@@ -141,28 +146,62 @@ lot.assign(car); // Can be shared/mutated from anywhere
 **Rust:**
 
 ```rust
-fn assign(&mut self, car: Car) {
-    self.current = Some(car); // Ownership moved
+struct ParkingLot<'a> {
+    current: Option<&'a Car>,
 }
 
-fn view(&self, car: &Car) {
-    println!("ID: {}", car.id);
+impl<'a> ParkingLot<'a> {
+    fn assign(&mut self, car: Car) {
+        // Ownership of `car` moves here
+        // For simplicity, we convert to a reference with lifetime 'a
+        self.current = Some(&car);
+        // Note: This example would need careful handling in real code
+    }
+
+    fn view(&self, car: &Car) {
+        println!("ID: {}", car.id);
+    }
 }
+
 ```
 
-✅ Rust enforces **single ownership**, and **borrowing** for safe read/write access. No accidental sharing or mutation.
+✅ Rust enforces:
 
+Single Ownership — each value has exactly one owner at a time.
+
+Borrowing — references (& or &mut) allow safe, temporary access without taking ownership.
+
+Lifetimes — the compiler checks how long references are valid to prevent dangling pointers or use-after-free errors.
+
+This ensures no accidental sharing or mutation and guarantees memory safety at compile time.
 ------------------------------------------------------------------------------------------------------------------------------------
-5. 🚫 How Java Can Go Wrong — and Rust Prevents It
+### 5. 🚫 How Java Can Go Wrong — and Rust Prevents It
 
-| Problem            | Java                     | Rust Fix                       |
-| ------------------ | ------------------------ | ------------------------------ |
-| Null Pointer       | `NullPointerException`   | `Option<T>` forces checks      |
-| Error Handling     | `try/catch` (may ignore) | `Result<T, E>` must be handled |
-| Memory Leaks       | GC-based                 | Ownership auto cleans          |
-| Thread Safety      | Manual effort            | Enforced via `Send` / `Sync`   |
-| Runtime Cost       | GC, reflection           | Zero-cost abstraction          |
-| Inheritance Errors | Mistyped overrides       | Trait impls are checked        |
+| Problem            | Java Example                                  | Rust Example                                | Rust Fix Description                       |
+| ------------------ | ---------------------------------------------| -------------------------------------------| ------------------------------------------|
+| Null Pointer       | ```java                                      | ```rust                                   | `Option<T>` forces explicit handling.     |
+|                    | String name = null;                           | let name: Option<String> = None;           | Prevents null pointer exceptions.          |
+|                    | System.out.println(name.length()); // NPE    | if let Some(n) = name { println!("{}", n.len()); } | Must check before access.                  |
+|                    | ```                                          | ```                                        |                                            |
+| Error Handling     | ```java                                      | ```rust                                   | `Result<T, E>` forces explicit error handling.|
+|                    | try {                                         | fn divide(a: i32, b: i32) -> Result<i32, String> { | No silent ignoring of errors.           |
+|                    |   int res = a / b;                            |     if b == 0 {                             |                                           |
+|                    | } catch (ArithmeticException e) {            |         Err(String::from("divide by zero")) |                                           |
+|                    |   System.out.println("Error");                |     } else {                               |                                           |
+|                    | }                                             |         Ok(a / b)                          |                                           |
+|                    | ```                                          | }                                           |                                           |
+| Memory Leaks       | ```java                                      | ```rust                                   | Ownership system auto frees unused memory. |
+|                    | // No explicit free; GC runs later            | {                                           | No manual memory management needed.       |
+|                    | List<String> list = new ArrayList<>();        |     let v = vec![1,2,3];                    |                                           |
+|                    | // If references leak, GC can't free           | } // v goes out of scope, memory freed      |                                           |
+|                    | ```                                          | ```                                        |                                           |
+| Thread Safety      | ```java                                      | ```rust                                   | Rust enforces `Send` and `Sync` traits for thread safety.|
+|                    | Runnable r = () -> {                           | use std::thread;                            | Compile-time checks prevent data races.   |
+|                    |   count++; // Unsafe shared mutable state     | let handle = thread::spawn(|| {             |                                           |
+|                    | };                                            |     println!("Hello from thread");         |                                           |
+|                    | ```                                          | });                                          |                                           |
+| Runtime Cost       | Uses reflection, GC, runtime checks           | Zero-cost abstractions via traits and ownership | Rust compiles down to efficient machine code.|
+| Inheritance Errors | Mistyped overrides compile silently           | Trait impls checked strictly by compiler   | Rust prevents silent bugs from bad overrides.|
 
 ✅ Rust won’t let you compile unless everything is safe, complete, and predictable.
 
