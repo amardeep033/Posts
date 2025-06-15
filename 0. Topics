@@ -1,12 +1,14 @@
 -> blockchain - protocol engineer
 -> socket - notify/api/async/session/gRPC/sockets/proto
 -> encoding - compression,video,proto
--> tool - json validator
+-> tool - json validator, session track, copy paste, journal
 -> metaprog - macros
 -> deep detail - (thread,channel,send,sync), (ownership,borrowing and lifetime), (oops,traits,gen,impl), (box,rc,arc,ref,smart pointer) 
--> library - log - async, multifile, panics, ignore another crate
+-> library - log - async, multifile, catgwise, panics, ignore another crate
 -> upi/stripe - psp, npci - interledger-rs, rust-ledger
 -> streaming - apache kafka, devops, cloud, 
+-> orch - thread, datalost, 
+-> gpu - llm, opencl, nlp
 
 -> dsa
 -> topics
