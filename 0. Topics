@@ -1,5 +1,5 @@
 -> blockchain - protocol engineer
--> socket - notify/api/async/session/gRPC/sockets/proto
+-> socket - notify/api/async(tokio/actix)/session/gRPC/sockets/proto
 -> encoding - compression,video,proto
 -> tool - json validator, session track, copy paste, journal
 -> metaprog - macros
