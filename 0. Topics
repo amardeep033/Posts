@@ -10,6 +10,10 @@
 -> orch - thread, datalost, 
 -> gpu - llm, opencl, nlp
 
+-> open-source
+-> kafka + clickhouse + rust
+-> socket + interledger + kafka + lambda/gateway + docker/kubernetes
+
 -> dsa
 -> topics
 -> devops
