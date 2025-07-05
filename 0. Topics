@@ -12,7 +12,7 @@
 
 -> open-source
 -> kafka + clickhouse + rust
--> socket + interledger + kafka + lambda/gateway + docker/kubernetes
+-> socket + interledger + kafka + lambda/gateway + docker/kubernetes + redis
 
 -> dsa
 -> topics
