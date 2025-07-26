@@ -24,5 +24,12 @@
 -> sql
 -> proj
 
--> dsa + dev: “Top K Elements – How Recommender Systems Work”
--> 
+-> dsa + dev:
+ | Video # | Title                                                     | What It Covers                                                      |
+| ------- | --------------------------------------------------------- | ------------------------------------------------------------------- |
+| 1       | **“LRU Cache – Not Just LeetCode, It’s in Your Browser”** | DSA + Build a simple LRU cache in Rust/Java, use it in a web server |
+| 2       | **“Top K Elements – How Recommender Systems Work”**       | Heap + show how Netflix-style suggestions use it                    |
+| 3       | **“Trie – Autocomplete Like VSCode”**                     | Trie + implement basic autocomplete CLI                             |
+| 4       | **“Graph – Real Life Route Planner”**                     | Dijkstra + route planner backend                                    |
+| 5       | **“Sliding Window – How Rate Limiting Works”**            | Use in API gateway logic                                            |
+| 6       | **“Union Find – Social Network Friend Circles”**          | DSU + LinkedIn-style mutual network logic                           |
