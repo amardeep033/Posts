@@ -24,6 +24,7 @@
 -> sql
 -> proj
 
+
 -> dsa + dev:
  | Video # | Title                                                     | What It Covers                                                      |
 | ------- | --------------------------------------------------------- | ------------------------------------------------------------------- |
@@ -33,3 +34,12 @@
 | 4       | **“Graph – Real Life Route Planner”**                     | Dijkstra + route planner backend                                    |
 | 5       | **“Sliding Window – How Rate Limiting Works”**            | Use in API gateway logic                                            |
 | 6       | **“Union Find – Social Network Friend Circles”**          | DSU + LinkedIn-style mutual network logic                           |
+
+
+-> Let me write you similar real-world stories for:
+🔥 Apache Kafka (LinkedIn → stream processing empire)
+🌐 Nginx (Russian engineer builds a global backbone)
+🛠 Apache HTTP Server (open-source before open-source was cool)
+☁️ Kubernetes (Google's baby to tame scale)
+🧠 Redis (built by one man in Italy, runs half the web)
+💾 PostgreSQL (an academic project turned world-class DB)
