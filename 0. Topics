@@ -43,3 +43,35 @@
 ☁️ Kubernetes (Google's baby to tame scale)
 🧠 Redis (built by one man in Italy, runs half the web)
 💾 PostgreSQL (an academic project turned world-class DB)
+
+
+
+✅ OpenTelemetry + Prometheus + Grafana
+→ Industry-standard stack for metrics, traces, and logs (observability 3-pillar).
+
+🧪 eBPF for Observability & Security
+→ Kernel-level performance monitoring and runtime security (e.g., Cilium, Falco).
+
+⚙️ Rust in Backend Systems
+→ Used with tokio, axum, tower for high-performance async APIs.
+
+🧠 LLMOps + Vector Databases
+→ Tools like LangChain, Pinecone, and Weaviate powering Retrieval-Augmented Generation (RAG).
+
+🌐 Wasm (WebAssembly) on Backend
+→ Lightweight, sandboxed runtime using tools like Fermyon & Spin for microservices.
+
+☁️ Kubernetes + KEDA + Knative
+→ Event-driven autoscaling and serverless workloads on K8s.
+
+🔐 Zero Trust + OPA + SPIFFE
+→ Fine-grained authorization and service identity in distributed systems.
+
+🔄 Kafka + Flink + ClickHouse
+→ Modern real-time data pipelines with high-throughput ingestion and querying.
+
+🧩 Platform Engineering with Backstage
+→ Developer portals and internal tooling to improve DevEx.
+
+🧱 Modern Infra-as-Code (Crossplane, Pulumi)
+→ Kubernetes-native or language-based infra automation, replacing Terraform in many cases.
