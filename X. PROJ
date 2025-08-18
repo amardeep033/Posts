@@ -1,0 +1,30 @@
+Title: Payment Gateway Simulator
+----------------------------------------------------------------------------------------------------------------------
+
+1. Language: Rust (tokio, tonic, prost, rdkafka, sqlx, clickhouse, redis) - gRPC APIs
+2. Databases:
+2.1 Postgres (OLTP, source of truth for payments + ledger)
+2.2 ClickHouse (analytics + aggregates)
+2.3 Redis (cache layer)
+3. Messaging: Kafka (payments, results)
+4. Observability: OpenTelemetry → Prometheus → Grafana dashboards
+5. Infra: Docker Compose for Kafka, Postgres, Redis, ClickHouse, Grafana
+
+----------------------------------------------------------------------------------------------------------------------
+
+1. Idempotent gRPC APIs for safe retries.
+2. Event-driven processing with Kafka.
+3. Ledger (double-entry) in Postgres for correctness.
+4. ClickHouse for fast analytics queries (success ratio, latency p95, GMV per merchant).
+5. Redis for speed (idempotency cache, rate limiting, hot status cache).
+6. Observability with OpenTelemetry, Prometheus, Grafana.
+
+----------------------------------------------------------------------------------------------------------------------
+
+Later (future-proof):
+1. Tracing backend (Jaeger/Tempo for full distributed tracing)
+2. AI/ML fraud detection agent on ClickHouse
+3. Real-time alerting (Prometheus Alertmanager or Kafka → Notifier service)
+
+----------------------------------------------------------------------------------------------------------------------
+
