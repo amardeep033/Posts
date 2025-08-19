@@ -13,7 +13,8 @@
 -> open-source
 -> kafka + clickhouse + rust
 -> socket + interledger + kafka + lambda/gateway + docker/kubernetes + redis 
--> upload + visualize + grafana + prometheus + opentelemetry + jagger + docker + Leptos
+-> upload + visualize + grafana + prometheus + opentelemetry + jagger + docker
+-> dioxus vs leptos 
 
 -> dsa
 -> topics
